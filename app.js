@@ -15,8 +15,8 @@ const ENDINGS = {
 };
 
 const CLUES = {
-  tally: { icon: '╱╱╱', title: 'Tally marks', text: 'Five lines, then five more, scratched deep into the old tunnel wall.', question: 'What was someone counting?' },
-  footprint: { icon: '◖', title: 'Fresh footprint', text: 'The earth is damp and the tread is sharp. This print is recent.', question: 'Who walked beneath the school?', image: IMAGES.scene4, imageAlt: 'A fresh shoe print with a sharp tread pressed into damp earth in the tunnel.' },
+  tally: { icon: '╱╱╱', title: 'Tally marks', text: 'Five lines, then five more, scratched deep into the old tunnel wall.', question: 'What was someone counting?', image: IMAGES.scene3, imageAlt: 'Groups of five tally marks scratched into the old tunnel wall.', caption: 'Tally groups carved into the tunnel wall' },
+  footprint: { icon: '◖', title: 'Fresh footprint', text: 'The earth is damp and the tread is sharp. This print is recent.', question: 'Who walked beneath the school?', image: IMAGES.scene4, imageAlt: 'A fresh shoe print with a sharp tread pressed into damp earth in the tunnel.', caption: 'Fresh tread mark in damp earth' },
   canteen: { icon: '◒', title: 'Metal canteen', text: 'A rusty water bottle lies beside the fresh footprints.', question: 'Did it belong to the people who once hid here?' },
   bcs: { icon: 'B·C·S', title: 'B.C.S. initials', text: 'The initials are carved beside an old arrow. The carving predates the school.', question: 'Whose name do the letters hide?' },
   photograph: { icon: '▣', title: 'Wartime photograph', text: 'Several families stand at a cave entrance. A man holds an old lantern.', question: 'Were they hiding—or building something here?' },
@@ -310,15 +310,16 @@ function cluePanel(id) {
   const clue = CLUES[id];
   if (!clue || !state.clues.includes(id)) return { eyebrow: 'Evidence', title: 'Not yet discovered', body: '<p class="empty">This clue is still hidden.</p>' };
   const visual = clue.image
-    ? `<figure class="clue-evidence-image"><img src="${clue.image}" alt="${escapeHtml(clue.imageAlt)}"><figcaption>${renderClueMark(id)}<span>Fresh tread mark in damp earth</span></figcaption></figure>`
+    ? `<figure class="clue-evidence-image clue-evidence-${id}"><img src="${clue.image}" alt="${escapeHtml(clue.imageAlt)}"><figcaption>${renderClueMark(id)}<span>${escapeHtml(clue.caption)}</span></figcaption></figure>`
     : `<div class="clue-symbol-large">${renderClueMark(id)}</div>`;
   return { eyebrow: 'Inspect evidence', title: clue.title, body: `<div class="clue-focus">${visual}<p>${escapeHtml(clue.text)}</p><blockquote><span>Question</span>${escapeHtml(clue.question)}</blockquote></div>` };
 }
 
 function renderClueMark(id) {
   const clue = CLUES[id];
-  if (id !== 'footprint') return `<span class="clue-mark clue-glyph" aria-hidden="true">${clue.icon}</span>`;
-  return `<svg class="clue-mark footprint-mark" viewBox="0 0 64 96" aria-hidden="true" focusable="false"><g transform="rotate(-10 32 48)" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M23 5C14 10 10 22 11 36c1 13 7 22 12 30 4 6 5 12 3 18-2 6 2 9 8 8 7 0 11-5 9-12-2-8-1-14 3-22 5-9 8-19 7-30C52 13 44 5 33 4c-4 0-7 0-10 1Z" stroke-width="4"/><path d="M16 24h32M14 37h36M19 50l27-4M24 65h19M27 78h15" stroke-width="4"/></g></svg>`;
+  if (id === 'tally') return `<svg class="clue-mark tally-mark" viewBox="0 0 70 58" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-linecap="round"><path d="M13 8 10 49M27 7l-3 42M41 7l-3 42M55 8l-3 41" stroke-width="5"/><path d="M5 39 62 15" stroke-width="6"/></g></svg>`;
+  if (id === 'footprint') return `<svg class="clue-mark footprint-mark" viewBox="0 0 64 96" aria-hidden="true" focusable="false"><g transform="rotate(-10 32 48)" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M23 5C14 10 10 22 11 36c1 13 7 22 12 30 4 6 5 12 3 18-2 6 2 9 8 8 7 0 11-5 9-12-2-8-1-14 3-22 5-9 8-19 7-30C52 13 44 5 33 4c-4 0-7 0-10 1Z" stroke-width="4"/><path d="M16 24h32M14 37h36M19 50l27-4M24 65h19M27 78h15" stroke-width="4"/></g></svg>`;
+  return `<span class="clue-mark clue-glyph" aria-hidden="true">${clue.icon}</span>`;
 }
 
 function renderCaveMap() {
