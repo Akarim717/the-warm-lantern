@@ -1,0 +1,12 @@
+# Local Netlify folder
+.netlify
+
+# Synced reference material and unrelated working files
+sources/
+story.md
+IMAGE_PROMPTS.md
+MANGROVE_IMAGE_PROMPTS.md
+AGENTS.md
+
+# Generated output
+dist/
