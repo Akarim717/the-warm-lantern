@@ -16,7 +16,7 @@ const ENDINGS = {
 
 const CLUES = {
   tally: { icon: '╱╱╱', title: 'Tally marks', text: 'Five lines, then five more, scratched deep into the old tunnel wall.', question: 'What was someone counting?' },
-  footprint: { icon: '◖', title: 'Fresh footprint', text: 'The earth is damp and the tread is sharp. This print is recent.', question: 'Who walked beneath the school?' },
+  footprint: { icon: '◖', title: 'Fresh footprint', text: 'The earth is damp and the tread is sharp. This print is recent.', question: 'Who walked beneath the school?', image: IMAGES.scene4, imageAlt: 'A fresh shoe print with a sharp tread pressed into damp earth in the tunnel.' },
   canteen: { icon: '◒', title: 'Metal canteen', text: 'A rusty water bottle lies beside the fresh footprints.', question: 'Did it belong to the people who once hid here?' },
   bcs: { icon: 'B·C·S', title: 'B.C.S. initials', text: 'The initials are carved beside an old arrow. The carving predates the school.', question: 'Whose name do the letters hide?' },
   photograph: { icon: '▣', title: 'Wartime photograph', text: 'Several families stand at a cave entrance. A man holds an old lantern.', question: 'Were they hiding—or building something here?' },
@@ -181,7 +181,7 @@ function renderNode() {
       <div class="narrative">${node.text.map(paragraph => `<p>${escapeHtml(paragraph)}</p>`).join('')}${dynamic ? `<p class="consequence"><span>Earlier choice</span>${escapeHtml(dynamic)}</p>` : ''}</div>
       ${node.dialogue ? `<div class="dialogue-stack">${node.dialogue.map(line => `<blockquote><span>${escapeHtml(line.name)}</span><p>“${escapeHtml(line.text)}”</p></blockquote>`).join('')}</div>` : ''}
       ${node.sound ? `<p class="sound-caption"><span aria-hidden="true">◖ )))</span>${escapeHtml(node.sound)}</p>` : ''}
-      ${node.clues?.length ? `<div class="found-clues">${node.clues.map(id => `<button data-clue="${id}"><span>${CLUES[id].icon}</span>${escapeHtml(CLUES[id].title)}</button>`).join('')}</div>` : ''}
+      ${node.clues?.length ? `<div class="found-clues">${node.clues.map(id => `<button data-clue="${id}">${renderClueMark(id)}${escapeHtml(CLUES[id].title)}</button>`).join('')}</div>` : ''}
       ${node.choices ? renderChoices(node) : `<button class="continue" data-continue>${escapeHtml(node.continueLabel || 'Continue')} <span aria-hidden="true">→</span></button>`}
     </section></article></main>`;
   bindStoryControls();
@@ -251,7 +251,7 @@ function renderJourneyReport() {
   app.innerHTML = `<main id="main" class="report"><header class="report-head"><button class="brand" data-home>The Warm <em>Lantern</em></button><span>Adventure Journey Report</span></header>
     <section class="report-hero"><span class="eyebrow">Your approach</span><h1>${profile.title}</h1><p>${profile.text}</p></section>
     <section class="report-grid"><article class="report-section route-report"><span class="eyebrow">Your route</span><h2>The choices that shaped the cave</h2><div class="route-line">${state.decisions.map((decision, index) => `<div><i>${index + 1}</i><span>${escapeHtml(decision.label)}</span></div>`).join('')}<div class="route-ending"><i>✦</i><span>${currentEnding ? ENDINGS[currentEnding].title : 'Adventure in progress'}</span></div></div></article>
-    <article class="report-section clue-report"><span class="eyebrow">Evidence collected</span><h2>${state.clues.length} clues discovered</h2><div class="report-clues">${state.clues.map(id => `<button data-clue="${id}"><span>${CLUES[id].icon}</span>${escapeHtml(CLUES[id].title)}</button>`).join('')}</div></article></section>
+    <article class="report-section clue-report"><span class="eyebrow">Evidence collected</span><h2>${state.clues.length} clues discovered</h2><div class="report-clues">${state.clues.map(id => `<button data-clue="${id}">${renderClueMark(id)}${escapeHtml(CLUES[id].title)}</button>`).join('')}</div></article></section>
     <section class="story-map-report"><span class="eyebrow">Branching map</span><h2>${allEndings ? 'The full story' : 'What remains in the dark'}</h2>${renderBranchMap(allEndings)}</section>
     <section class="reflection"><span class="eyebrow">Optional reflection</span><h2>What would you do?</h2>${[['hardest', 'Which decision was hardest for you?'], ['clue', 'What clue influenced your decisions the most?'], ['change', 'If you could replay one decision, would you change it?']].map(([id, label]) => `<label>${label}<textarea data-reflection="${id}" rows="2" placeholder="Write a short thought…">${escapeHtml(state.reflections[id] || '')}</textarea></label>`).join('')}<p>Your answers stay on this device.</p></section>
     <div class="report-actions"><button class="primary" data-try>Try another path <span aria-hidden="true">↻</span></button><button class="ghost" data-home>Return home</button></div></main>`;
@@ -292,7 +292,7 @@ function openOverlay(type, clueId) {
   closeOverlay();
   const content = {
     how: { eyebrow: 'How to play', title: 'Enter the mystery', body: `<div class="how-list"><p><i>01</i><span><strong>Read one short scene at a time.</strong>The story pauses completely when your decision matters.</span></p><p><i>02</i><span><strong>Choose the path you believe in.</strong>Every decision changes a clue, consequence, scene or ending.</span></p><p><i>03</i><span><strong>Use your case tools.</strong>Review clues, reveal the cave map and retrace your journey.</span></p><p><i>04</i><span><strong>Find four endings.</strong>Undiscovered routes stay hidden until you explore them.</span></p></div>` },
-    clues: { eyebrow: 'Evidence drawer', title: 'Clues', body: state.clues.length ? `<div class="clue-drawer">${state.clues.map(id => `<button data-drawer-clue="${id}"><span>${CLUES[id].icon}</span><strong>${escapeHtml(CLUES[id].title)}</strong><small>Inspect clue →</small></button>`).join('')}</div>` : '<p class="empty">The first clue is still somewhere in the dark.</p>' },
+    clues: { eyebrow: 'Evidence drawer', title: 'Clues', body: state.clues.length ? `<div class="clue-drawer">${state.clues.map(id => `<button data-drawer-clue="${id}">${renderClueMark(id)}<strong>${escapeHtml(CLUES[id].title)}</strong><small>Inspect clue →</small></button>`).join('')}</div>` : '<p class="empty">The first clue is still somewhere in the dark.</p>' },
     map: { eyebrow: 'Mei Lin’s cave map', title: 'Explored ground', body: renderCaveMap() },
     journey: { eyebrow: 'Your route so far', title: 'Journey', body: state.decisions.length ? `<div class="journey-drawer">${state.decisions.map((decision, index) => `<p><i>${String(index + 1).padStart(2, '0')}</i><span>${escapeHtml(decision.label)}</span></p>`).join('')}</div>` : '<p class="empty">Your first major decision is still ahead.</p>' },
     clue: cluePanel(clueId),
@@ -309,7 +309,16 @@ function openOverlay(type, clueId) {
 function cluePanel(id) {
   const clue = CLUES[id];
   if (!clue || !state.clues.includes(id)) return { eyebrow: 'Evidence', title: 'Not yet discovered', body: '<p class="empty">This clue is still hidden.</p>' };
-  return { eyebrow: 'Inspect evidence', title: clue.title, body: `<div class="clue-focus"><div>${clue.icon}</div><p>${escapeHtml(clue.text)}</p><blockquote><span>Question</span>${escapeHtml(clue.question)}</blockquote></div>` };
+  const visual = clue.image
+    ? `<figure class="clue-evidence-image"><img src="${clue.image}" alt="${escapeHtml(clue.imageAlt)}"><figcaption>${renderClueMark(id)}<span>Fresh tread mark in damp earth</span></figcaption></figure>`
+    : `<div class="clue-symbol-large">${renderClueMark(id)}</div>`;
+  return { eyebrow: 'Inspect evidence', title: clue.title, body: `<div class="clue-focus">${visual}<p>${escapeHtml(clue.text)}</p><blockquote><span>Question</span>${escapeHtml(clue.question)}</blockquote></div>` };
+}
+
+function renderClueMark(id) {
+  const clue = CLUES[id];
+  if (id !== 'footprint') return `<span class="clue-mark clue-glyph" aria-hidden="true">${clue.icon}</span>`;
+  return `<svg class="clue-mark footprint-mark" viewBox="0 0 64 96" aria-hidden="true" focusable="false"><g transform="rotate(-10 32 48)" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M23 5C14 10 10 22 11 36c1 13 7 22 12 30 4 6 5 12 3 18-2 6 2 9 8 8 7 0 11-5 9-12-2-8-1-14 3-22 5-9 8-19 7-30C52 13 44 5 33 4c-4 0-7 0-10 1Z" stroke-width="4"/><path d="M16 24h32M14 37h36M19 50l27-4M24 65h19M27 78h15" stroke-width="4"/></g></svg>`;
 }
 
 function renderCaveMap() {

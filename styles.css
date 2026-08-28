@@ -167,7 +167,14 @@ button:focus-visible, a:focus-visible, textarea:focus-visible { outline: 3px sol
 .clue-drawer button { min-height: 150px; display: grid; align-content: space-between; padding: 16px; border: 1px solid rgba(21, 36, 33, .17); background: rgba(255, 255, 255, .35); color: var(--ink); text-align: left; cursor: pointer; }
 .clue-drawer button:hover { border-color: var(--rust); }
 .clue-drawer button > span { color: var(--rust); font-size: 1.2rem; }.clue-drawer strong { font-family: var(--display); font-size: 1.15rem; }.clue-drawer small { color: #68726d; font-size: .66rem; }
-.clue-focus > div { min-height: 280px; display: grid; place-items: center; margin: 28px 0; border: 1px solid rgba(21, 36, 33, .18); background: radial-gradient(circle, rgba(233, 154, 50, .25), transparent 53%), var(--cave); color: var(--gold); font-family: var(--display); font-size: 5rem; }
+.clue-mark { display: inline-block; flex: 0 0 auto; color: var(--rust); }
+.footprint-mark { width: 1.3rem; height: 1.8rem; vertical-align: middle; }
+.clue-symbol-large { min-height: 280px; display: grid; place-items: center; margin: 28px 0; border: 1px solid rgba(21, 36, 33, .18); background: radial-gradient(circle, rgba(233, 154, 50, .25), transparent 53%), var(--cave); color: var(--gold); font-family: var(--display); font-size: 5rem; }
+.clue-symbol-large .footprint-mark { width: 7rem; height: 10.5rem; color: var(--gold); }
+.clue-evidence-image { position: relative; min-height: 280px; margin: 28px 0; overflow: hidden; border: 1px solid rgba(21, 36, 33, .18); background: var(--cave); }
+.clue-evidence-image img { display: block; width: 100%; height: clamp(300px, 52vh, 440px); object-fit: cover; object-position: center 76%; filter: saturate(.82) contrast(1.04); }
+.clue-evidence-image figcaption { position: absolute; right: 0; bottom: 0; left: 0; display: flex; align-items: center; gap: 9px; padding: 10px 14px; background: rgba(6, 23, 23, .9); color: var(--chalk); font-size: .62rem; font-weight: 750; letter-spacing: .1em; text-transform: uppercase; }
+.clue-evidence-image figcaption .footprint-mark { width: 1.1rem; height: 1.5rem; color: var(--gold); }
 .clue-focus > p { color: #43514b; font-size: 1rem; line-height: 1.65; }
 .clue-focus blockquote { margin: 30px 0; padding: 22px; border-left: 3px solid var(--rust); background: rgba(133, 84, 56, .08); color: var(--ink); font-family: var(--display); font-size: 1.4rem; }
 .clue-focus blockquote span { display: block; margin-bottom: 8px; color: var(--rust); font-family: var(--body); font-size: .6rem; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; }
